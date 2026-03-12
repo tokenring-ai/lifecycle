@@ -1,2 +1,2 @@
-# lifecycle
-A package implementing lifecycle hooks for TokenRing apps and agents
+# agent-metrics
+Agent metrics tracking for TokenRing agents
