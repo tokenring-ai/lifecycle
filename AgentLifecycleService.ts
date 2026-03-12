@@ -29,9 +29,9 @@ export default class AgentLifecycleService implements TokenRingService {
     });
   }
 
-  addHooks(pkgName: string, hooks: Record<string, HookSubscription>) {
+  addHooks(hooks: Record<string, HookSubscription>) {
     for (const hookName in hooks) {
-      this.hooks.register(`${pkgName}/${hookName}`, hooks[hookName]);
+      this.hooks.register(hookName, hooks[hookName]);
     }
   }
 
