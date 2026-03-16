@@ -1,10 +1,26 @@
-import type Agent from "@tokenring-ai/agent/Agent";
-import type {TokenRingAgentCommand} from "@tokenring-ai/agent/types";
+import {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
 import AgentLifecycleService from "../../AgentLifecycleService.ts";
+
+const inputSchema = {
+  args: {},
+  prompt: {
+    description: "Space-separated hook names to set as enabled",
+    required: true,
+  },
+  allowAttachments: false,
+} as const satisfies AgentCommandInputSchema;
+
+async function execute({prompt, agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
+  const hookNames = prompt?.trim().split(/\s+/);
+  agent.requireServiceByType(AgentLifecycleService).setEnabledHooks(hookNames, agent);
+  return `Selected hooks: ${hookNames.join(", ") || "(none)"}`;
+}
 
 export default {
   name: "hooks set",
   description: "Set enabled hooks (replaces current selection)",
+  inputSchema,
+  execute,
   help: `# /hooks set <hook1> [hook2...]
 
 Set the enabled hooks, replacing the current selection entirely.
@@ -21,9 +37,4 @@ Set the enabled hooks, replacing the current selection entirely.
 
 - Hook names are case-sensitive
 - Replaces all currently enabled hooks with the specified list`,
-  execute: async (remainder: string, agent: Agent): Promise<string> => {
-    const hookNames = remainder?.trim().split(/\s+/);
-    agent.requireServiceByType(AgentLifecycleService).setEnabledHooks(hookNames, agent);
-    return `Selected hooks: ${hookNames.join(", ") || "(none)"}`;
-  },
-} satisfies TokenRingAgentCommand;
+} satisfies TokenRingAgentCommand<typeof inputSchema>;

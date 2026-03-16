@@ -1,11 +1,40 @@
-import type Agent from "@tokenring-ai/agent/Agent";
 import type {TreeLeaf} from "@tokenring-ai/agent/question";
-import type {TokenRingAgentCommand} from "@tokenring-ai/agent/types";
+import {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
 import AgentLifecycleService from "../../AgentLifecycleService.ts";
+
+const inputSchema = {
+  args: {},
+  allowAttachments: false,
+} as const satisfies AgentCommandInputSchema;
+
+async function execute({agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
+  const agentLifecycleService = agent.requireServiceByType(AgentLifecycleService);
+  const hookNames = agentLifecycleService.getAllHookNames();
+
+  if (hookNames.length === 0) return "No hooks are currently registered.";
+
+  const hookTree: TreeLeaf[] = [{
+    name: `Registered Hooks (${hookNames.length})`,
+    children: hookNames.sort().map(name => ({ value: name, name })),
+  }];
+
+  const selection = await agent.askQuestion({
+    message: "Select a hook:",
+    question: { type: "treeSelect", label: "Hook Selection", key: "result", tree: hookTree },
+  });
+
+  if (selection) {
+    agentLifecycleService.setEnabledHooks(selection, agent);
+    return `Selected hook: ${selection.join(", ") || "(none)"}`;
+  }
+  return "Hook selection cancelled.";
+}
 
 export default {
   name: "hooks select",
   description: "Interactive hook selection",
+  inputSchema,
+  execute,
   help: `# /hooks select
 
 Open an interactive tree-based selector to choose which hooks to enable.
@@ -22,26 +51,4 @@ Open an interactive tree-based selector to choose which hooks to enable.
 
 - Only available in interactive (non-headless) mode
 - Selection replaces the current enabled hooks`,
-  execute: async (_remainder: string, agent: Agent): Promise<string> => {
-    const agentLifecycleService = agent.requireServiceByType(AgentLifecycleService);
-    const hookNames = agentLifecycleService.getAllHookNames();
-
-    if (hookNames.length === 0) return "No hooks are currently registered.";
-
-    const hookTree: TreeLeaf[] = [{
-      name: `Registered Hooks (${hookNames.length})`,
-      children: hookNames.sort().map(name => ({ value: name, name })),
-    }];
-
-    const selection = await agent.askQuestion({
-      message: "Select a hook:",
-      question: { type: "treeSelect", label: "Hook Selection", key: "result", tree: hookTree },
-    });
-
-    if (selection) {
-      agentLifecycleService.setEnabledHooks(selection, agent);
-      return `Selected hook: ${selection.join(", ") || "(none)"}`;
-    }
-    return "Hook selection cancelled.";
-  },
-} satisfies TokenRingAgentCommand;
+} satisfies TokenRingAgentCommand<typeof inputSchema>;

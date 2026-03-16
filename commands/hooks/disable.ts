@@ -1,10 +1,26 @@
-import type Agent from "@tokenring-ai/agent/Agent";
-import type {TokenRingAgentCommand} from "@tokenring-ai/agent/types";
+import {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
 import AgentLifecycleService from "../../AgentLifecycleService.ts";
+
+const inputSchema = {
+  args: {},
+  prompt: {
+    description: "Space-separated hook names to disable",
+    required: true,
+  },
+  allowAttachments: false,
+} as const satisfies AgentCommandInputSchema;
+
+async function execute({prompt, agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
+  const hookNames = prompt?.trim().split(/\s+/);
+  agent.requireServiceByType(AgentLifecycleService).disableHooks(hookNames, agent);
+  return `Disabled Hooks: ${hookNames.join(", ") || "(none)"}`;
+}
 
 export default {
   name: "hooks disable",
   description: "Disable one or more hooks",
+  inputSchema,
+  execute,
   help: `# /hooks disable <hook1> [hook2...]
 
 Remove one or more hooks from the current enabled set.
@@ -22,9 +38,4 @@ Remove one or more hooks from the current enabled set.
 
 - Hook names are case-sensitive
 - Removes from the current enabled set without affecting other hooks`,
-  execute: async (remainder: string, agent: Agent): Promise<string> => {
-    const hookNames = remainder?.trim().split(/\s+/);
-    agent.requireServiceByType(AgentLifecycleService).disableHooks(hookNames, agent);
-    return `Disabled Hooks: ${hookNames.join(", ") || "(none)"}`;
-  },
-} satisfies TokenRingAgentCommand;
+} satisfies TokenRingAgentCommand<typeof inputSchema>;

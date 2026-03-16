@@ -7,4 +7,4 @@ import hooksReset from "./commands/hooks/reset.ts";
 import hooksSelect from "./commands/hooks/select.ts";
 import hooksSet from "./commands/hooks/set.ts";
 
-export default [hooksGet, hooksSet, hooksSelect, hooksList, hooksEnable, hooksDisable, hooksReset] satisfies TokenRingAgentCommand[];
+export default [hooksGet, hooksSet, hooksSelect, hooksList, hooksEnable, hooksDisable, hooksReset] as const satisfies readonly TokenRingAgentCommand<any>[];

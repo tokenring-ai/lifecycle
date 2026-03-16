@@ -18,7 +18,7 @@ export default {
   install(app, config) {
     app.addServices(new AgentLifecycleService(config.lifecycle));
     app.waitForService(AgentCommandService, agentCommandService => {
-      agentCommandService.addAgentCommands(agentCommands);
+      agentCommandService.addAgentCommands([...agentCommands]);
     })
   },
   config: packageConfigSchema
