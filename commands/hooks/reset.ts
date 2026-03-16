@@ -4,7 +4,7 @@ import {LifecycleState} from "../../state/lifecycleState.ts";
 
 export default {
   name: "hooks reset",
-  description: "/hooks reset - Reset hooks to initial configuration",
+  description: "Reset hooks to initial configuration",
   help: `# /hooks reset
 
 Reset the enabled hooks to the initial configuration defined at startup.

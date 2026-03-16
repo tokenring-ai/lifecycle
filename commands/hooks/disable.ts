@@ -4,7 +4,7 @@ import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
 export default {
   name: "hooks disable",
-  description: "/hooks disable - Disable one or more hooks",
+  description: "Disable one or more hooks",
   help: `# /hooks disable <hook1> [hook2...]
 
 Remove one or more hooks from the current enabled set.

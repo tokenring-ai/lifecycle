@@ -4,7 +4,7 @@ import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
 export default {
   name: "hooks enable",
-  description: "/hooks enable - Enable one or more hooks",
+  description: "Enable one or more hooks",
   help: `# /hooks enable <hook1> [hook2...]
 
 Add one or more hooks to the current enabled set.

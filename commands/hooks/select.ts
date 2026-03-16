@@ -5,7 +5,7 @@ import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
 export default {
   name: "hooks select",
-  description: "/hooks select - Interactive hook selection",
+  description: "Interactive hook selection",
   help: `# /hooks select
 
 Open an interactive tree-based selector to choose which hooks to enable.

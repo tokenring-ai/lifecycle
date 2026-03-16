@@ -4,7 +4,7 @@ import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
 export default {
   name: "hooks set",
-  description: "/hooks set - Set enabled hooks (replaces current selection)",
+  description: "Set enabled hooks (replaces current selection)",
   help: `# /hooks set <hook1> [hook2...]
 
 Set the enabled hooks, replacing the current selection entirely.

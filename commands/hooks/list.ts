@@ -5,7 +5,7 @@ import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
 export default {
   name: "hooks list",
-  description: "/hooks list - List all registered hooks",
+  description: "List all registered hooks",
   help: `# /hooks list
 
 List all hooks currently registered with the agent lifecycle service.
