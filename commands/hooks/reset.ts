@@ -1,10 +1,7 @@
 import {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
 import {LifecycleState} from "../../state/lifecycleState.ts";
 
-const inputSchema = {
-  args: {},
-  allowAttachments: false,
-} as const satisfies AgentCommandInputSchema;
+const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
 async function execute({agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
   const hooks = agent.mutateState(LifecycleState, state => {
@@ -18,9 +15,7 @@ export default {
   description: "Reset hooks to initial configuration",
   inputSchema,
   execute,
-  help: `# /hooks reset
-
-Reset the enabled hooks to the initial configuration defined at startup.
+  help: `Reset the enabled hooks to the initial configuration defined at startup.
 
 ## Usage
 

@@ -2,10 +2,7 @@ import type {TreeLeaf} from "@tokenring-ai/agent/question";
 import {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
 import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
-const inputSchema = {
-  args: {},
-  allowAttachments: false,
-} as const satisfies AgentCommandInputSchema;
+const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
 async function execute({agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
   const agentLifecycleService = agent.requireServiceByType(AgentLifecycleService);
@@ -35,9 +32,7 @@ export default {
   description: "Interactive hook selection",
   inputSchema,
   execute,
-  help: `# /hooks select
-
-Open an interactive tree-based selector to choose which hooks to enable.
+  help: `Open an interactive tree-based selector to choose which hooks to enable.
 
 ## Usage
 

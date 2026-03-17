@@ -3,15 +3,17 @@ import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
 const inputSchema = {
   args: {},
-  prompt: {
+  positionals: [{
+    name: "hookNames",
     description: "Space-separated hook names to set as enabled",
     required: true,
-  },
+    greedy: true,
+  }],
   allowAttachments: false,
 } as const satisfies AgentCommandInputSchema;
 
-async function execute({prompt, agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
-  const hookNames = prompt?.trim().split(/\s+/);
+async function execute({positionals, agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
+  const hookNames = positionals.hookNames.split(/\s+/);
   agent.requireServiceByType(AgentLifecycleService).setEnabledHooks(hookNames, agent);
   return `Selected hooks: ${hookNames.join(", ") || "(none)"}`;
 }
@@ -21,20 +23,9 @@ export default {
   description: "Set enabled hooks (replaces current selection)",
   inputSchema,
   execute,
-  help: `# /hooks set <hook1> [hook2...]
-
-Set the enabled hooks, replacing the current selection entirely.
-
-## Usage
-
-/hooks set <hook1> [hook2...]
+  help: `Set the enabled hooks, replacing the current selection entirely.
 
 ## Example
 
-/hooks set preProcess onMessage   # Enable only preProcess and onMessage
-
-## Notes
-
-- Hook names are case-sensitive
-- Replaces all currently enabled hooks with the specified list`,
+/hooks set preProcess onMessage`,
 } satisfies TokenRingAgentCommand<typeof inputSchema>;

@@ -2,10 +2,7 @@ import {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} f
 import markdownList from "@tokenring-ai/utility/string/markdownList";
 import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
-const inputSchema = {
-  args: {},
-  allowAttachments: false,
-} as const satisfies AgentCommandInputSchema;
+const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
 async function execute({agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
   const hookEntries = agent.requireServiceByType(AgentLifecycleService).getAllHookEntries();
@@ -18,9 +15,7 @@ export default {
   description: "List all registered hooks",
   inputSchema,
   execute,
-  help: `# /hooks list
-
-List all hooks currently registered with the agent lifecycle service.
+  help: `List all hooks currently registered with the agent lifecycle service.
 
 ## Usage
 

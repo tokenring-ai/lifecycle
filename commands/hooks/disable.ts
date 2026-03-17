@@ -3,15 +3,17 @@ import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
 const inputSchema = {
   args: {},
-  prompt: {
+  positionals: [{
+    name: "hookNames",
     description: "Space-separated hook names to disable",
     required: true,
-  },
+    greedy: true,
+  }],
   allowAttachments: false,
 } as const satisfies AgentCommandInputSchema;
 
-async function execute({prompt, agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
-  const hookNames = prompt?.trim().split(/\s+/);
+async function execute({positionals, agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
+  const hookNames = positionals.hookNames.split(/\s+/);
   agent.requireServiceByType(AgentLifecycleService).disableHooks(hookNames, agent);
   return `Disabled Hooks: ${hookNames.join(", ") || "(none)"}`;
 }
@@ -21,21 +23,10 @@ export default {
   description: "Disable one or more hooks",
   inputSchema,
   execute,
-  help: `# /hooks disable <hook1> [hook2...]
-
-Remove one or more hooks from the current enabled set.
-
-## Usage
-
-/hooks disable <hook1> [hook2...]
+  help: `Remove one or more hooks from the current enabled set.
 
 ## Example
 
-/hooks disable postProcess            # Disable the postProcess hook
-/hooks disable preProcess onMessage   # Disable multiple hooks
-
-## Notes
-
-- Hook names are case-sensitive
-- Removes from the current enabled set without affecting other hooks`,
+/hooks disable postProcess
+/hooks disable preProcess onMessage`,
 } satisfies TokenRingAgentCommand<typeof inputSchema>;

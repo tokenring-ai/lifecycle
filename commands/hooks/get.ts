@@ -1,10 +1,7 @@
 import {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
 import {LifecycleState} from "../../state/lifecycleState.ts";
 
-const inputSchema = {
-  args: {},
-  allowAttachments: false,
-} as const satisfies AgentCommandInputSchema;
+const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
 async function execute({agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
   const hooks = agent.getState(LifecycleState).enabledHooks;
@@ -16,9 +13,7 @@ export default {
   description: "Show currently enabled hooks",
   inputSchema,
   execute,
-  help: `# /hooks get
-
-Show the currently enabled hooks.
+  help: `Show the currently enabled hooks.
 
 ## Usage
 
