@@ -3,17 +3,11 @@ import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
 const inputSchema = {
   args: {},
-  positionals: [{
-    name: "hookNames",
-    description: "Space-separated hook names to set as enabled",
-    required: true,
-    greedy: true,
-  }],
-  allowAttachments: false,
+  remainder: {name: "hookNames", description: "Space-separated hook names to set as enabled", required: true}
 } as const satisfies AgentCommandInputSchema;
 
-async function execute({positionals, agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
-  const hookNames = positionals.hookNames.split(/\s+/);
+async function execute({remainder, agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
+  const hookNames = remainder.split(/\s+/);
   agent.requireServiceByType(AgentLifecycleService).setEnabledHooks(hookNames, agent);
   return `Selected hooks: ${hookNames.join(", ") || "(none)"}`;
 }
