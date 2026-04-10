@@ -1,23 +1,34 @@
 import type {TreeLeaf} from "@tokenring-ai/agent/question";
-import {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
+import type {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand,} from "@tokenring-ai/agent/types";
 import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
 const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
-async function execute({agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
-  const agentLifecycleService = agent.requireServiceByType(AgentLifecycleService);
+async function execute({
+                         agent,
+                       }: AgentCommandInputType<typeof inputSchema>): Promise<string> {
+  const agentLifecycleService = agent.requireServiceByType(
+    AgentLifecycleService,
+  );
   const hookNames = agentLifecycleService.getAllHookNames();
 
   if (hookNames.length === 0) return "No hooks are currently registered.";
 
-  const hookTree: TreeLeaf[] = [{
-    name: `Registered Hooks (${hookNames.length})`,
-    children: hookNames.sort().map(name => ({ value: name, name })),
-  }];
+  const hookTree: TreeLeaf[] = [
+    {
+      name: `Registered Hooks (${hookNames.length})`,
+      children: hookNames.sort().map((name) => ({value: name, name})),
+    },
+  ];
 
   const selection = await agent.askQuestion({
     message: "Select a hook:",
-    question: { type: "treeSelect", label: "Hook Selection", key: "result", tree: hookTree },
+    question: {
+      type: "treeSelect",
+      label: "Hook Selection",
+      key: "result",
+      tree: hookTree,
+    },
   });
 
   if (selection) {

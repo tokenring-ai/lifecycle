@@ -1,14 +1,15 @@
-import {Agent} from "@tokenring-ai/agent";
-import {TokenRingService} from "@tokenring-ai/app/types";
+import type {Agent} from "@tokenring-ai/agent";
+import type {TokenRingService} from "@tokenring-ai/app/types";
 import deepMerge from "@tokenring-ai/utility/object/deepMerge";
 import KeyedRegistry from "@tokenring-ai/utility/registry/KeyedRegistry";
-import {LifecycleAgentConfigSchema, type ParsedLifecycleServiceConfig} from "./schema.ts";
+import {LifecycleAgentConfigSchema, type ParsedLifecycleServiceConfig,} from "./schema.ts";
 import {LifecycleState} from "./state/lifecycleState.ts";
-import {type Hook, HookSubscription} from "./types";
+import type {Hook, HookSubscription} from "./types";
 
 export default class AgentLifecycleService implements TokenRingService {
   readonly name = "AgentLifecycleService";
-  description = "A service which dispatches hooks when certain agent lifecycle event happen.";
+  description =
+    "A service which dispatches hooks when certain agent lifecycle event happen.";
 
   private hooks = new KeyedRegistry<HookSubscription>();
 
@@ -20,7 +21,10 @@ export default class AgentLifecycleService implements TokenRingService {
   }
 
   attach(agent: Agent): void {
-    let {enabledHooks, ...config} = deepMerge(this.options.agentDefaults, agent.getAgentConfigSlice('lifecycle', LifecycleAgentConfigSchema));
+    const {enabledHooks, ...config} = deepMerge(
+      this.options.agentDefaults,
+      agent.getAgentConfigSlice("lifecycle", LifecycleAgentConfigSchema),
+    );
 
     // The enabled tools can include wildcards, so they need to be mapped to actual tool names with ensureItemNamesLike
     agent.initializeState(LifecycleState, {
@@ -44,7 +48,7 @@ export default class AgentLifecycleService implements TokenRingService {
 
     agent.mutateState(LifecycleState, (state) => {
       state.enabledHooks = hookNames;
-    })
+    });
   }
 
   enableHooks(hookNames: string[], agent: Agent): void {
@@ -56,16 +60,15 @@ export default class AgentLifecycleService implements TokenRingService {
           state.enabledHooks.push(hook);
         }
       }
-    })
+    });
   }
 
   disableHooks(hookNames: string[], agent: Agent): void {
     this.hooks.ensureItems(hookNames);
     agent.mutateState(LifecycleState, (state) => {
-      state.enabledHooks = state.enabledHooks
-        .filter((hook) =>
-          !hookNames.includes(hook)
-        )
+      state.enabledHooks = state.enabledHooks.filter(
+        (hook) => !hookNames.includes(hook),
+      );
     });
   }
 

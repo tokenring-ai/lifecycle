@@ -1,6 +1,6 @@
-import TokenRingApp from "@tokenring-ai/app";
-import {createRPCEndpoint} from "@tokenring-ai/rpc/createRPCEndpoint";
 import AgentManager from "@tokenring-ai/agent/services/AgentManager";
+import type TokenRingApp from "@tokenring-ai/app";
+import {createRPCEndpoint} from "@tokenring-ai/rpc/createRPCEndpoint";
 import AgentLifecycleService from "../AgentLifecycleService.ts";
 import LifecycleRpcSchema from "./schema.ts";
 
@@ -11,12 +11,13 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
     return {
       hooks: Object.fromEntries(
         hooks.map(([hookName, hook]) => [
-          hookName, { 
+          hookName,
+          {
             displayName: hook.displayName || hookName,
-            description: hook.description
+            description: hook.description,
           },
-        ])
-      )
+        ]),
+      ),
     };
   },
 
@@ -25,7 +26,7 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
     if (!agent) throw new Error("Agent not found");
     const lifecycleService = app.requireService(AgentLifecycleService);
     return {
-      hooks: lifecycleService.getEnabledHooks(agent)
+      hooks: lifecycleService.getEnabledHooks(agent),
     };
   },
 
@@ -34,7 +35,7 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
     if (!agent) throw new Error("Agent not found");
     const lifecycleService = app.requireService(AgentLifecycleService);
     lifecycleService.setEnabledHooks(args.hooks, agent);
-    return { hooks: lifecycleService.getEnabledHooks(agent) };
+    return {hooks: lifecycleService.getEnabledHooks(agent)};
   },
 
   enableHooks(args, app: TokenRingApp) {
@@ -42,7 +43,7 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
     if (!agent) throw new Error("Agent not found");
     const lifecycleService = app.requireService(AgentLifecycleService);
     lifecycleService.enableHooks(args.hooks, agent);
-    return { hooks: lifecycleService.getEnabledHooks(agent) };
+    return {hooks: lifecycleService.getEnabledHooks(agent)};
   },
 
   disableHooks(args, app: TokenRingApp) {
@@ -50,6 +51,6 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
     if (!agent) throw new Error("Agent not found");
     const lifecycleService = app.requireService(AgentLifecycleService);
     lifecycleService.disableHooks(args.hooks, agent);
-    return { hooks: lifecycleService.getEnabledHooks(agent) };
-  }
+    return {hooks: lifecycleService.getEnabledHooks(agent)};
+  },
 });
