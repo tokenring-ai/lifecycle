@@ -104,6 +104,7 @@ interface HookSubscription {
 **Predefined Hook Classes**:
 
 - **`BeforeAgentInput`**: Triggered before processing an agent input
+
   ```typescript
   class BeforeAgentInput {
     readonly type = "hook";
@@ -112,6 +113,7 @@ interface HookSubscription {
   ```
 
 - **`AfterAgentInputSuccess`**: Triggered after a successful agent response
+
   ```typescript
   class AfterAgentInputSuccess {
     readonly type = "hook";
@@ -123,6 +125,7 @@ interface HookSubscription {
   ```
 
 - **`AfterAgentInputError`**: Triggered when an agent encounters an error
+
   ```typescript
   class AfterAgentInputError {
     readonly type = "hook";
@@ -134,6 +137,7 @@ interface HookSubscription {
   ```
 
 - **`AfterAgentInputCancelled`**: Triggered when an agent request is cancelled
+
   ```typescript
   class AfterAgentInputCancelled {
     readonly type = "hook";
@@ -145,6 +149,7 @@ interface HookSubscription {
   ```
 
 - **`AfterAgentInputHandled`**: Triggered after any agent response (success, error, or cancelled)
+
   ```typescript
   class AfterAgentInputHandled {
     readonly type = "hook";
@@ -287,6 +292,7 @@ List all registered hooks.
 ```
 
 **Example Output**:
+
 ```
 Registered hooks:
 - preProcess
@@ -303,6 +309,7 @@ Show currently enabled hooks for the agent.
 ```
 
 **Example Output**:
+
 ```
 Currently enabled hooks: preProcess, onMessage
 ```

@@ -2,7 +2,7 @@ import type {Agent} from "@tokenring-ai/agent";
 import type {TokenRingService} from "@tokenring-ai/app/types";
 import deepMerge from "@tokenring-ai/utility/object/deepMerge";
 import KeyedRegistry from "@tokenring-ai/utility/registry/KeyedRegistry";
-import {LifecycleAgentConfigSchema, type ParsedLifecycleServiceConfig,} from "./schema.ts";
+import {LifecycleAgentConfigSchema, type ParsedLifecycleServiceConfig} from "./schema.ts";
 import {LifecycleState} from "./state/lifecycleState.ts";
 import type {Hook, HookSubscription} from "./types";
 
