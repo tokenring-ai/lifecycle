@@ -1,5 +1,6 @@
 import type {RPCSchema} from "@tokenring-ai/rpc/types";
 import {z} from "zod";
+import {AgentNotFoundSchema} from "@tokenring-ai/agent/schema";
 
 export default {
   name: "Lifecycle RPC",
@@ -23,9 +24,13 @@ export default {
       input: z.object({
         agentId: z.string(),
       }),
-      result: z.object({
-        hooks: z.array(z.string()),
-      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal('success'),
+          hooks: z.array(z.string()),
+        }),
+        AgentNotFoundSchema
+      ]),
     },
     setEnabledHooks: {
       type: "mutation",
@@ -33,9 +38,13 @@ export default {
         agentId: z.string(),
         hooks: z.array(z.string()),
       }),
-      result: z.object({
-        hooks: z.array(z.string()),
-      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal('success'),
+          hooks: z.array(z.string()),
+        }),
+        AgentNotFoundSchema
+      ]),
     },
     enableHooks: {
       type: "mutation",
@@ -43,9 +52,13 @@ export default {
         agentId: z.string(),
         hooks: z.array(z.string()),
       }),
-      result: z.object({
-        hooks: z.array(z.string()),
-      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal('success'),
+          hooks: z.array(z.string()),
+        }),
+        AgentNotFoundSchema
+      ]),
     },
     disableHooks: {
       type: "mutation",
@@ -53,9 +66,13 @@ export default {
         agentId: z.string(),
         hooks: z.array(z.string()),
       }),
-      result: z.object({
-        hooks: z.array(z.string()),
-      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal('success'),
+          hooks: z.array(z.string()),
+        }),
+        AgentNotFoundSchema
+      ]),
     },
   },
 } satisfies RPCSchema;

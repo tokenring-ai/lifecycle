@@ -23,34 +23,43 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
 
   getEnabledHooks(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
-    if (!agent) throw new Error("Agent not found");
+    if (!agent) {
+      return {status: 'agentNotFound'};
+    }
     const lifecycleService = app.requireService(AgentLifecycleService);
     return {
+      status: 'success',
       hooks: lifecycleService.getEnabledHooks(agent),
     };
   },
 
   setEnabledHooks(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
-    if (!agent) throw new Error("Agent not found");
+    if (!agent) {
+      return {status: 'agentNotFound'};
+    }
     const lifecycleService = app.requireService(AgentLifecycleService);
     lifecycleService.setEnabledHooks(args.hooks, agent);
-    return {hooks: lifecycleService.getEnabledHooks(agent)};
+    return {status: 'success', hooks: lifecycleService.getEnabledHooks(agent)};
   },
 
   enableHooks(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
-    if (!agent) throw new Error("Agent not found");
+    if (!agent) {
+      return {status: 'agentNotFound'};
+    }
     const lifecycleService = app.requireService(AgentLifecycleService);
     lifecycleService.enableHooks(args.hooks, agent);
-    return {hooks: lifecycleService.getEnabledHooks(agent)};
+    return {status: 'success', hooks: lifecycleService.getEnabledHooks(agent)};
   },
 
   disableHooks(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
-    if (!agent) throw new Error("Agent not found");
+    if (!agent) {
+      return {status: 'agentNotFound'};
+    }
     const lifecycleService = app.requireService(AgentLifecycleService);
     lifecycleService.disableHooks(args.hooks, agent);
-    return {hooks: lifecycleService.getEnabledHooks(agent)};
+    return {status: 'success', hooks: lifecycleService.getEnabledHooks(agent)};
   },
 });
