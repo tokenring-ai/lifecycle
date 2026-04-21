@@ -1,4 +1,4 @@
-import type {HookCallback} from "./util/hooks.ts";
+import type { HookCallback } from "./util/hooks.ts";
 
 export type Hook = {
   type: "hook";

@@ -1,11 +1,9 @@
-import type {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
-import {LifecycleState} from "../../state/lifecycleState.ts";
+import type { AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand } from "@tokenring-ai/agent/types";
+import { LifecycleState } from "../../state/lifecycleState.ts";
 
 const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
-function execute({
-                   agent,
-                 }: AgentCommandInputType<typeof inputSchema>): string {
+function execute({ agent }: AgentCommandInputType<typeof inputSchema>): string {
   const hooks = agent.getState(LifecycleState).enabledHooks;
   return `Currently enabled hooks: ${hooks.join(", ") || "(none)"}`;
 }

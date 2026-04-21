@@ -1,6 +1,6 @@
 import AgentManager from "@tokenring-ai/agent/services/AgentManager";
 import type TokenRingApp from "@tokenring-ai/app";
-import {createRPCEndpoint} from "@tokenring-ai/rpc/createRPCEndpoint";
+import { createRPCEndpoint } from "@tokenring-ai/rpc/createRPCEndpoint";
 import AgentLifecycleService from "../AgentLifecycleService.ts";
 import LifecycleRpcSchema from "./schema.ts";
 
@@ -24,11 +24,11 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
   getEnabledHooks(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
     if (!agent) {
-      return {status: 'agentNotFound'};
+      return { status: "agentNotFound" };
     }
     const lifecycleService = app.requireService(AgentLifecycleService);
     return {
-      status: 'success',
+      status: "success",
       hooks: lifecycleService.getEnabledHooks(agent),
     };
   },
@@ -36,30 +36,30 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
   setEnabledHooks(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
     if (!agent) {
-      return {status: 'agentNotFound'};
+      return { status: "agentNotFound" };
     }
     const lifecycleService = app.requireService(AgentLifecycleService);
     lifecycleService.setEnabledHooks(args.hooks, agent);
-    return {status: 'success', hooks: lifecycleService.getEnabledHooks(agent)};
+    return { status: "success", hooks: lifecycleService.getEnabledHooks(agent) };
   },
 
   enableHooks(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
     if (!agent) {
-      return {status: 'agentNotFound'};
+      return { status: "agentNotFound" };
     }
     const lifecycleService = app.requireService(AgentLifecycleService);
     lifecycleService.enableHooks(args.hooks, agent);
-    return {status: 'success', hooks: lifecycleService.getEnabledHooks(agent)};
+    return { status: "success", hooks: lifecycleService.getEnabledHooks(agent) };
   },
 
   disableHooks(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
     if (!agent) {
-      return {status: 'agentNotFound'};
+      return { status: "agentNotFound" };
     }
     const lifecycleService = app.requireService(AgentLifecycleService);
     lifecycleService.disableHooks(args.hooks, agent);
-    return {status: 'success', hooks: lifecycleService.getEnabledHooks(agent)};
+    return { status: "success", hooks: lifecycleService.getEnabledHooks(agent) };
   },
 });

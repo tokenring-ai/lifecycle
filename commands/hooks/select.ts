@@ -1,15 +1,11 @@
-import type {TreeLeaf} from "@tokenring-ai/agent/question";
-import type {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
+import type { TreeLeaf } from "@tokenring-ai/agent/question";
+import type { AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand } from "@tokenring-ai/agent/types";
 import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
 const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
-async function execute({
-                         agent,
-                       }: AgentCommandInputType<typeof inputSchema>): Promise<string> {
-  const agentLifecycleService = agent.requireServiceByType(
-    AgentLifecycleService,
-  );
+async function execute({ agent }: AgentCommandInputType<typeof inputSchema>): Promise<string> {
+  const agentLifecycleService = agent.requireServiceByType(AgentLifecycleService);
   const hookNames = agentLifecycleService.getAllHookNames();
 
   if (hookNames.length === 0) return "No hooks are currently registered.";
@@ -17,7 +13,7 @@ async function execute({
   const hookTree: TreeLeaf[] = [
     {
       name: `Registered Hooks (${hookNames.length})`,
-      children: hookNames.sort().map((name) => ({value: name, name})),
+      children: hookNames.sort().map(name => ({ value: name, name })),
     },
   ];
 

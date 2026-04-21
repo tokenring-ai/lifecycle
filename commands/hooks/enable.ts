@@ -1,4 +1,4 @@
-import type {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
+import type { AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand } from "@tokenring-ai/agent/types";
 import AgentLifecycleService from "../../AgentLifecycleService.ts";
 
 const inputSchema = {
@@ -10,14 +10,9 @@ const inputSchema = {
   },
 } as const satisfies AgentCommandInputSchema;
 
-function execute({
-                   remainder,
-                   agent,
-                 }: AgentCommandInputType<typeof inputSchema>): string {
+function execute({ remainder, agent }: AgentCommandInputType<typeof inputSchema>): string {
   const hookNames = remainder.split(/\s+/);
-  agent
-    .requireServiceByType(AgentLifecycleService)
-    .enableHooks(hookNames, agent);
+  agent.requireServiceByType(AgentLifecycleService).enableHooks(hookNames, agent);
   return `Enabled Hooks: ${hookNames.join(", ") || "(none)"}`;
 }
 

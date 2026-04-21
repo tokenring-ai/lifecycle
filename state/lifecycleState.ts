@@ -1,6 +1,6 @@
-import {AgentStateSlice} from "@tokenring-ai/agent/types";
-import {z} from "zod";
-import type {ParsedLifecycleServiceConfig} from "../schema.ts";
+import { AgentStateSlice } from "@tokenring-ai/agent/types";
+import { z } from "zod";
+import type { ParsedLifecycleServiceConfig } from "../schema.ts";
 
 const serializationSchema = z
   .object({
@@ -8,14 +8,10 @@ const serializationSchema = z
   })
   .prefault({});
 
-export class LifecycleState extends AgentStateSlice<
-  typeof serializationSchema
-> {
+export class LifecycleState extends AgentStateSlice<typeof serializationSchema> {
   enabledHooks: string[] = [];
 
-  constructor(
-    readonly initialConfig: ParsedLifecycleServiceConfig["agentDefaults"],
-  ) {
+  constructor(readonly initialConfig: ParsedLifecycleServiceConfig["agentDefaults"]) {
     super("LifecycleState", serializationSchema);
     this.enabledHooks = [...initialConfig.enabledHooks];
   }

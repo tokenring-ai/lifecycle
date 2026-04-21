@@ -2,7 +2,7 @@ import z from "zod";
 
 export const LifecycleAgentConfigSchema = z
   .object({
-    enabledHooks: z.array(z.string()).optional(),
+    enabledHooks: z.array(z.string()).exactOptional(),
   })
   .default({});
 
@@ -16,9 +16,5 @@ export const LifecycleServiceConfigSchema = z
   })
   .prefault({});
 
-export type ParsedLifecycleServiceConfig = z.output<
-  typeof LifecycleServiceConfigSchema
->;
-export type ParsedLifecycleAgentConfig = z.output<
-  typeof LifecycleAgentConfigSchema
->;
+export type ParsedLifecycleServiceConfig = z.output<typeof LifecycleServiceConfigSchema>;
+export type ParsedLifecycleAgentConfig = z.output<typeof LifecycleAgentConfigSchema>;
