@@ -1,10 +1,14 @@
 # @tokenring-ai/lifecycle
 
-Agent lifecycle management for TokenRing that provides a hook-based system for dispatching events during agent lifecycle operations. This package enables extensible event-driven interactions with agent processing, allowing custom handlers to be registered and executed at key points in the agent's request/response cycle.
+Agent lifecycle management for TokenRing that provides a hook-based system for dispatching events during agent lifecycle
+operations. This package enables extensible event-driven interactions with agent processing, allowing custom handlers to
+be registered and executed at key points in the agent's request/response cycle.
 
 ## Overview
 
-The `@tokenring-ai/lifecycle` package provides a comprehensive hook system for the Token Ring AI ecosystem. It serves as an event dispatching service that enables agents to notify registered handlers about lifecycle events such as input processing, success responses, error responses, and cancellations.
+The `@tokenring-ai/lifecycle` package provides a comprehensive hook system for the Token Ring AI ecosystem. It serves as
+an event dispatching service that enables agents to notify registered handlers about lifecycle events such as input
+processing, success responses, error responses, and cancellations.
 
 As a core service package, it integrates seamlessly with the Token Ring framework through its plugin system, offering:
 
@@ -30,7 +34,7 @@ As a core service package, it integrates seamlessly with the Token Ring framewor
 bun add @tokenring-ai/lifecycle
 ```
 
-### Dependencies
+### Package Dependencies
 
 This package requires the following dependencies:
 
@@ -48,10 +52,15 @@ The main service class that manages hook registration and execution.
 
 **Location**: `AgentLifecycleService.ts`
 
+**Implements**: `TokenRingService`
+
 **Key Methods**:
 
 ```typescript
 class AgentLifecycleService implements TokenRingService {
+  readonly name = "AgentLifecycleService";
+  readonly description = "A service which dispatches hooks when certain agent lifecycle event happen.";
+
   // Hook registration
   registerHook: (name: string, hook: HookSubscription) => void
   getAllHookEntries: () => [string, HookSubscription][]
@@ -62,9 +71,13 @@ class AgentLifecycleService implements TokenRingService {
 
   // Hook management
   addHooks(hooks: Record<string, HookSubscription>): void
+
   getEnabledHooks(agent: Agent): string[]
+
   setEnabledHooks(hookNames: string[], agent: Agent): void
+
   enableHooks(hookNames: string[], agent: Agent): void
+
   disableHooks(hookNames: string[], agent: Agent): void
 
   // Hook execution
@@ -84,15 +97,17 @@ interface ParsedLifecycleServiceConfig {
 
 ### Hook Types
 
-The package defines several hook event types for different lifecycle stages:
+The package defines several hook event types for different lifecycle stages. All hook types implement the `Hook` interface:
 
 ```typescript
-// Base hook interface
 interface Hook {
   type: "hook";
 }
+```
 
-// Hook subscription with callbacks
+**Hook Subscription**:
+
+```typescript
 interface HookSubscription {
   name: string;
   displayName: string;
@@ -168,7 +183,7 @@ Callback registration for hook execution:
 class HookCallback<T extends Hook> {
   constructor(
     readonly hookConstructor: abstract new (...args: any[]) => T,
-    readonly callback: (data: T, agent: Agent) => Promise<void> | void
+    readonly callback: (data: T, agent: Agent) => MaybePromise<void>
   ) {}
 }
 ```
@@ -279,9 +294,19 @@ await lifecycleService.executeHooks(
 );
 ```
 
-## Commands
+## Chat Commands
 
 The package provides several agent commands for hook management:
+
+| Command                    | Description                                    |
+|----------------------------|------------------------------------------------|
+| `/hooks list`              | List all registered hooks                      |
+| `/hooks get`               | Show currently enabled hooks                   |
+| `/hooks set <hooks...>`    | Set enabled hooks (replaces current selection) |
+| `/hooks enable <hooks...>` | Add hooks to the enabled set                   |
+| `/hooks disable <hooks...>`| Remove hooks from the enabled set              |
+| `/hooks select`            | Interactive tree-based hook selection          |
+| `/hooks reset`             | Reset enabled hooks to initial configuration   |
 
 ### `/hooks list`
 
@@ -293,7 +318,7 @@ List all registered hooks.
 
 **Example Output**:
 
-```
+```text
 Registered hooks:
 - preProcess
 - onMessage
@@ -310,7 +335,7 @@ Show currently enabled hooks for the agent.
 
 **Example Output**:
 
-```
+```text
 Currently enabled hooks: preProcess, onMessage
 ```
 
@@ -360,13 +385,13 @@ Reset enabled hooks to initial configuration.
 
 The package provides RPC endpoints for remote hook management:
 
-| Endpoint | Method | Request Params | Response Params |
-|----------|--------|----------------|-----------------|
-| `/rpc/lifecycle` | `getAvailableHooks` | `{}` | `{ hooks: Record<string, { displayName: string, description: string }> }` |
-| `/rpc/lifecycle` | `getEnabledHooks` | `{ agentId: string }` | `{ hooks: string[] }` |
-| `/rpc/lifecycle` | `setEnabledHooks` | `{ agentId: string, hooks: string[] }` | `{ hooks: string[] }` |
-| `/rpc/lifecycle` | `enableHooks` | `{ agentId: string, hooks: string[] }` | `{ hooks: string[] }` |
-| `/rpc/lifecycle` | `disableHooks` | `{ agentId: string, hooks: string[] }` | `{ hooks: string[] }` |
+| Endpoint         | Method              | Request Params                         | Response Params                                                           |
+|------------------|---------------------|----------------------------------------|---------------------------------------------------------------------------|
+| `/rpc/lifecycle` | `getAvailableHooks` | `{}`                                   | `{ hooks: Record<string, { displayName: string, description: string }> }` |
+| `/rpc/lifecycle` | `getEnabledHooks`   | `{ agentId: string }`                  | `{ status: "success", hooks: string[] }` or `{ status: "agentNotFound" }` |
+| `/rpc/lifecycle` | `setEnabledHooks`   | `{ agentId: string, hooks: string[] }` | `{ status: "success", hooks: string[] }` or `{ status: "agentNotFound" }` |
+| `/rpc/lifecycle` | `enableHooks`       | `{ agentId: string, hooks: string[] }` | `{ status: "success", hooks: string[] }` or `{ status: "agentNotFound" }` |
+| `/rpc/lifecycle` | `disableHooks`      | `{ agentId: string, hooks: string[] }` | `{ status: "success", hooks: string[] }` or `{ status: "agentNotFound" }` |
 
 ### RPC Usage Example
 
@@ -427,12 +452,17 @@ The package uses `LifecycleState` for per-agent state persistence:
 ```typescript
 class LifecycleState extends AgentStateSlice {
   enabledHooks: string[] = [];
-  
+
+  constructor(readonly initialConfig: ParsedLifecycleServiceConfig["agentDefaults"])
+
   // State methods
   reset(): void
+
   serialize(): { enabledHooks: string[] }
+
   deserialize(data: { enabledHooks: string[] }): void
-  show(): string[]
+
+  show(): string
 }
 ```
 
@@ -490,7 +520,7 @@ bun test:coverage
 
 ### Package Structure
 
-```
+```text
 pkg/lifecycle/
 ├── AgentLifecycleService.ts    # Main service class
 ├── index.ts                    # Package exports
@@ -516,7 +546,7 @@ pkg/lifecycle/
         └── reset.ts            # /hooks reset command
 ```
 
-## Dependencies
+## npm Dependencies
 
 - `@tokenring-ai/agent` (0.2.0) - Core agent system
 - `@tokenring-ai/app` (0.2.0) - Base application framework
@@ -529,7 +559,6 @@ pkg/lifecycle/
 - **@tokenring-ai/agent** - Core agent system that uses lifecycle hooks
 - **@tokenring-ai/app** - Base application framework
 - **@tokenring-ai/rpc** - RPC service for remote endpoints
-- **@tokenring-ai/command** - Command system for CLI interaction
 
 ## License
 

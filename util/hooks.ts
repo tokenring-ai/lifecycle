@@ -7,6 +7,7 @@ import type {
   ParsedInputReceived,
 } from "@tokenring-ai/agent/AgentEvents";
 import type { MaybePromise } from "bun";
+import { z } from "zod";
 import type { Hook } from "../types.ts";
 
 export class BeforeAgentInput {
@@ -51,9 +52,9 @@ export class AfterAgentInputHandled {
   ) {}
 }
 
-export class HookCallback<T extends Hook> {
+export class HookCallback<T extends Hook<any>> {
   constructor(
     readonly hookConstructor: abstract new (...args: any[]) => T,
-    readonly callback: (data: T, agent: Agent) => MaybePromise<void>,
+    readonly callback: (data: T, agent: Agent) => MaybePromise<z.infer<T["returnType"]>>,
   ) {}
 }

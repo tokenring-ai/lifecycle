@@ -2,6 +2,7 @@ import type { Agent } from "@tokenring-ai/agent";
 import type { TokenRingService } from "@tokenring-ai/app/types";
 import deepMerge from "@tokenring-ai/utility/object/deepMerge";
 import KeyedRegistry from "@tokenring-ai/utility/registry/KeyedRegistry";
+import { z, ZodType } from "zod";
 import { LifecycleAgentConfigSchema, type ParsedLifecycleServiceConfig } from "./schema.ts";
 import { LifecycleState } from "./state/lifecycleState.ts";
 import type { Hook, HookSubscription } from "./types";
@@ -10,7 +11,7 @@ export default class AgentLifecycleService implements TokenRingService {
   readonly name = "AgentLifecycleService";
   description = "A service which dispatches hooks when certain agent lifecycle event happen.";
 
-  private hooks = new KeyedRegistry<HookSubscription>();
+  private hooks = new KeyedRegistry<HookSubscription<any>>();
 
   registerHook = this.hooks.set;
   getAllHookEntries = this.hooks.entriesArray;
@@ -28,9 +29,9 @@ export default class AgentLifecycleService implements TokenRingService {
     });
   }
 
-  addHooks(hooks: Record<string, HookSubscription>) {
-    for (const hookName in hooks) {
-      this.hooks.set(hookName, hooks[hookName]);
+  addHooks(...hooks: HookSubscription<any>[]) {
+    for (const hook of hooks) {
+      this.hooks.set(hook.name, hook);
     }
   }
 
@@ -65,16 +66,21 @@ export default class AgentLifecycleService implements TokenRingService {
     });
   }
 
-  async executeHooks(data: Hook, agent: Agent): Promise<void> {
+  async executeHooks<T extends ZodType>(data: Hook<T>, agent: Agent): Promise<z.infer<T>[]> {
+    const results: z.infer<T>[] = [];
+
     for (const hookName of this.getEnabledHooks(agent)) {
       const subscription = this.hooks.get(hookName);
       if (subscription) {
         for (const callback of subscription.callbacks) {
           if (callback.hookConstructor === data.constructor) {
-            await callback.callback(data, agent);
+            const result = await callback.callback(data, agent);
+            results.push(result as any);
           }
         }
       }
     }
+
+    return results;
   }
 }
