@@ -1,4 +1,4 @@
-import { ZodType, ZodVoid } from "zod";
+import type { ZodType, ZodVoid } from "zod";
 import type { HookCallback } from "./util/hooks.ts";
 
 export type Hook<T extends ZodType = ZodVoid> = {

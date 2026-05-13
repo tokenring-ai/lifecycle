@@ -4,10 +4,10 @@
   "description": "Orchestrates initialization, state transitions, and cleanup for agents and services.",
   "dependencies": {
     "zod": "^4.3.6",
-    "@tokenring-ai/agent": "0.2.0",
-    "@tokenring-ai/utility": "0.2.0",
-    "@tokenring-ai/app": "0.2.0",
-    "@tokenring-ai/rpc": "0.2.0"
+    "@tokenring-ai/agent": "workspace:*",
+    "@tokenring-ai/utility": "workspace:*",
+    "@tokenring-ai/app": "workspace:*",
+    "@tokenring-ai/rpc": "workspace:*"
   },
   "exports": {
     ".": "./index.ts",

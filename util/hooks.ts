@@ -7,7 +7,7 @@ import type {
   ParsedInputReceived,
 } from "@tokenring-ai/agent/AgentEvents";
 import type { MaybePromise } from "bun";
-import { z } from "zod";
+import type { z } from "zod";
 import type { Hook } from "../types.ts";
 
 export class BeforeAgentInput {

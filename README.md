@@ -97,7 +97,8 @@ interface ParsedLifecycleServiceConfig {
 
 ### Hook Types
 
-The package defines several hook event types for different lifecycle stages. All hook types implement the `Hook` interface:
+The package defines several hook event types for different lifecycle stages. All hook types implement the `Hook`
+interface:
 
 ```typescript
 interface Hook {
@@ -298,15 +299,15 @@ await lifecycleService.executeHooks(
 
 The package provides several agent commands for hook management:
 
-| Command                    | Description                                    |
-|----------------------------|------------------------------------------------|
-| `/hooks list`              | List all registered hooks                      |
-| `/hooks get`               | Show currently enabled hooks                   |
-| `/hooks set <hooks...>`    | Set enabled hooks (replaces current selection) |
-| `/hooks enable <hooks...>` | Add hooks to the enabled set                   |
-| `/hooks disable <hooks...>`| Remove hooks from the enabled set              |
-| `/hooks select`            | Interactive tree-based hook selection          |
-| `/hooks reset`             | Reset enabled hooks to initial configuration   |
+| Command                     | Description                                    |
+|-----------------------------|------------------------------------------------|
+| `/hooks list`               | List all registered hooks                      |
+| `/hooks get`                | Show currently enabled hooks                   |
+| `/hooks set <hooks...>`     | Set enabled hooks (replaces current selection) |
+| `/hooks enable <hooks...>`  | Add hooks to the enabled set                   |
+| `/hooks disable <hooks...>` | Remove hooks from the enabled set              |
+| `/hooks select`             | Interactive tree-based hook selection          |
+| `/hooks reset`              | Reset enabled hooks to initial configuration   |
 
 ### `/hooks list`
 
