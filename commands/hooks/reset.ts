@@ -5,9 +5,10 @@ const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
 function execute({ agent }: AgentCommandInputType<typeof inputSchema>): string {
   const hooks = agent.mutateState(LifecycleState, state => {
-    return (state.enabledHooks = state.initialConfig.enabledHooks);
+    state.reset();
+    return state.enabledHooks
   });
-  return `Reset hooks to initial selections: ${hooks.join(", ") || "(none)"}`;
+  return `Reset hooks to initial selections: ${[...hooks].join(", ") || "(none)"}`;
 }
 
 export default {

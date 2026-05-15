@@ -9,28 +9,28 @@ const serializationSchema = z
   .prefault({});
 
 export class LifecycleState extends AgentStateSlice<typeof serializationSchema> {
-  enabledHooks: string[] = [];
+  enabledHooks: Set<string>;
 
   constructor(readonly initialConfig: ParsedLifecycleServiceConfig["agentDefaults"]) {
     super("LifecycleState", serializationSchema);
-    this.enabledHooks = [...initialConfig.enabledHooks];
+    this.enabledHooks = new Set(initialConfig.enabledHooks);
   }
 
   reset(): void {
-    this.enabledHooks = [...this.initialConfig.enabledHooks];
+    this.enabledHooks = new Set(this.initialConfig.enabledHooks);
   }
 
   serialize(): z.output<typeof serializationSchema> {
     return {
-      enabledHooks: this.enabledHooks,
+      enabledHooks: [...this.enabledHooks],
     };
   }
 
   deserialize(data: z.output<typeof serializationSchema>): void {
-    this.enabledHooks = data.enabledHooks;
+    this.enabledHooks = new Set(data.enabledHooks);
   }
 
   show(): string {
-    return `Enabled Hooks: ${this.enabledHooks.length > 0 ? this.enabledHooks.join(", ") : "None"}`;
+    return `Enabled Hooks: ${this.enabledHooks.size > 0 ? [...this.enabledHooks].join(", ") : "None"}`;
   }
 }

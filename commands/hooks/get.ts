@@ -5,7 +5,7 @@ const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
 function execute({ agent }: AgentCommandInputType<typeof inputSchema>): string {
   const hooks = agent.getState(LifecycleState).enabledHooks;
-  return `Currently enabled hooks: ${hooks.join(", ") || "(none)"}`;
+  return `Currently enabled hooks: ${[...hooks].join(", ") || "(none)"}`;
 }
 
 export default {
