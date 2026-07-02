@@ -1,8 +1,18 @@
 import AgentManager from "@tokenring-ai/agent/services/AgentManager";
 import type TokenRingApp from "@tokenring-ai/app";
+import { createAgentStateSliceStream } from "@tokenring-ai/rpc/createAgentStateStream";
 import { createRPCEndpoint } from "@tokenring-ai/rpc/createRPCEndpoint";
 import AgentLifecycleService from "../AgentLifecycleService.ts";
+import { LifecycleState } from "../state/lifecycleState.ts";
 import LifecycleRpcSchema from "./schema.ts";
+
+const streamEnabledHooks = createAgentStateSliceStream({
+  SliceClass: LifecycleState,
+  project: state => ({
+    status: "success" as const,
+    hooks: [...state.enabledHooks],
+  }),
+});
 
 export default createRPCEndpoint(LifecycleRpcSchema, {
   getAvailableHooks(_args, app: TokenRingApp) {
@@ -32,6 +42,8 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
       hooks: [...lifecycleService.getEnabledHooks(agent)],
     };
   },
+
+  streamEnabledHooks,
 
   setEnabledHooks(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);

@@ -32,6 +32,19 @@ export default {
         AgentNotFoundSchema,
       ]),
     },
+    streamEnabledHooks: {
+      type: "stream",
+      input: z.object({
+        agentId: z.string(),
+      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal("success"),
+          hooks: z.array(z.string()),
+        }),
+        AgentNotFoundSchema,
+      ]),
+    },
     setEnabledHooks: {
       type: "mutation",
       input: z.object({
