@@ -1,4 +1,5 @@
-import { AgentNotFoundSchema } from "@tokenring-ai/agent/schema";
+import { AgentNotFoundSchema } from "@tokenring-ai/rpc/types";
+import { SuccessSchema } from "@tokenring-ai/rpc/types";
 import type { RPCSchema } from "@tokenring-ai/rpc/types";
 import { z } from "zod";
 
@@ -25,8 +26,7 @@ export default {
         agentId: z.string(),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           hooks: z.array(z.string()),
         }),
         AgentNotFoundSchema,
@@ -38,8 +38,7 @@ export default {
         agentId: z.string(),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           hooks: z.array(z.string()),
         }),
         AgentNotFoundSchema,
@@ -52,8 +51,7 @@ export default {
         hooks: z.array(z.string()),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           hooks: z.array(z.string()),
         }),
         AgentNotFoundSchema,
@@ -66,8 +64,7 @@ export default {
         hooks: z.array(z.string()),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           hooks: z.array(z.string()),
         }),
         AgentNotFoundSchema,
@@ -80,8 +77,7 @@ export default {
         hooks: z.array(z.string()),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           hooks: z.array(z.string()),
         }),
         AgentNotFoundSchema,
