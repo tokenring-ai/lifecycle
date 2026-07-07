@@ -2,7 +2,7 @@ import type { Agent } from "@tokenring-ai/agent";
 import type { TokenRingService } from "@tokenring-ai/app/types";
 import deepClone from "@tokenring-ai/utility/object/deepClone";
 import KeyedRegistry from "@tokenring-ai/utility/registry/KeyedRegistry";
-import type { z, ZodType } from "zod";
+import type { ZodType, z } from "zod";
 import { LifecycleAgentConfigSchema, type ParsedLifecycleServiceConfig } from "./schema.ts";
 import { LifecycleState } from "./state/lifecycleState.ts";
 import type { Hook, HookSubscription } from "./types";
