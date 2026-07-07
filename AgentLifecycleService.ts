@@ -2,7 +2,7 @@ import type { Agent } from "@tokenring-ai/agent";
 import type { TokenRingService } from "@tokenring-ai/app/types";
 import deepClone from "@tokenring-ai/utility/object/deepClone";
 import KeyedRegistry from "@tokenring-ai/utility/registry/KeyedRegistry";
-import type { ZodType, z } from "zod";
+import type { z, ZodType } from "zod";
 import { LifecycleAgentConfigSchema, type ParsedLifecycleServiceConfig } from "./schema.ts";
 import { LifecycleState } from "./state/lifecycleState.ts";
 import type { Hook, HookSubscription } from "./types";
@@ -11,7 +11,7 @@ export default class AgentLifecycleService implements TokenRingService {
   readonly name = "AgentLifecycleService";
   description = "A service which dispatches hooks when certain agent lifecycle event happen.";
 
-  private hooks = new KeyedRegistry<HookSubscription<any>>();
+  private hooks = new KeyedRegistry<HookSubscription>();
 
   registerHook = this.hooks.set;
   getAllHookEntries = this.hooks.entriesArray;
@@ -29,7 +29,7 @@ export default class AgentLifecycleService implements TokenRingService {
     });
   }
 
-  addHooks(...hooks: HookSubscription<any>[]) {
+  addHooks(...hooks: HookSubscription[]) {
     for (const hook of hooks) {
       this.hooks.set(hook.name, hook);
     }
@@ -77,7 +77,7 @@ export default class AgentLifecycleService implements TokenRingService {
         for (const callback of subscription.callbacks) {
           if (callback.hookConstructor === data.constructor) {
             const result = await callback.callback(data, agent);
-            results.push(result as any);
+            results.push(result as z.infer<T>);
           }
         }
       }
