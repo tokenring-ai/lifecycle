@@ -1,6 +1,6 @@
+import { createAgentStateSliceStream } from "@tokenring-ai/agent/rpc/createAgentStateStream";
 import AgentManager from "@tokenring-ai/agent/services/AgentManager";
 import type TokenRingApp from "@tokenring-ai/app";
-import { createAgentStateSliceStream } from "@tokenring-ai/rpc/createAgentStateStream";
 import { createRPCEndpoint } from "@tokenring-ai/rpc/createRPCEndpoint";
 import AgentLifecycleService from "../AgentLifecycleService.ts";
 import { LifecycleState } from "../state/lifecycleState.ts";
