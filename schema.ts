@@ -1,3 +1,4 @@
+import type { ConfigFieldMeta } from "@tokenring-ai/app/config/metadata";
 import z from "zod";
 
 export const LifecycleAgentConfigSchema = z
@@ -10,11 +11,16 @@ export const LifecycleServiceConfigSchema = z
   .object({
     agentDefaults: z
       .object({
-        enabledHooks: z.array(z.string()).default([]),
+        enabledHooks: z
+          .array(z.string())
+          .default([])
+          .meta({ description: "Lifecycle hook names enabled by default for new agents" } satisfies ConfigFieldMeta),
       })
-      .prefault({}),
+      .prefault({})
+      .meta({ label: "Agent Defaults" } satisfies ConfigFieldMeta),
   })
-  .prefault({});
+  .prefault({})
+  .meta({ label: "Lifecycle", description: "Agent lifecycle hook configuration" } satisfies ConfigFieldMeta);
 
 export type ParsedLifecycleServiceConfig = z.output<typeof LifecycleServiceConfigSchema>;
 export type ParsedLifecycleAgentConfig = z.output<typeof LifecycleAgentConfigSchema>;
