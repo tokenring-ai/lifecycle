@@ -2,6 +2,7 @@ import type { Agent } from "@tokenring-ai/agent";
 import type { TokenRingService } from "@tokenring-ai/app/types";
 import deepClone from "@tokenring-ai/utility/object/deepClone";
 import KeyedRegistry from "@tokenring-ai/utility/registry/KeyedRegistry";
+import EnhancedSet from "@tokenring-ai/utility/set/enhancedSet";
 import type { ZodType, z } from "zod";
 import { LifecycleAgentConfigSchema, type ParsedLifecycleServiceConfig } from "./schema.ts";
 import { LifecycleState } from "./state/lifecycleState.ts";
@@ -35,7 +36,7 @@ export default class AgentLifecycleService implements TokenRingService {
     }
   }
 
-  getEnabledHooks(agent: Agent): Set<string> {
+  getEnabledHooks(agent: Agent): EnhancedSet<string> {
     return agent.getState(LifecycleState).enabledHooks;
   }
 
@@ -43,7 +44,7 @@ export default class AgentLifecycleService implements TokenRingService {
     this.hooks.ensureItems(hookNames);
 
     agent.mutateState(LifecycleState, state => {
-      state.enabledHooks = new Set(hookNames);
+      state.enabledHooks = new EnhancedSet(hookNames);
     });
   }
 

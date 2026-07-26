@@ -39,7 +39,7 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
     const lifecycleService = app.requireService(AgentLifecycleService);
     return {
       status: "success",
-      hooks: [...lifecycleService.getEnabledHooks(agent)],
+      hooks: lifecycleService.getEnabledHooks(agent).valuesArray(),
     };
   },
 
@@ -52,7 +52,7 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
     }
     const lifecycleService = app.requireService(AgentLifecycleService);
     lifecycleService.setEnabledHooks(args.hooks, agent);
-    return { status: "success", hooks: [...lifecycleService.getEnabledHooks(agent)] };
+    return { status: "success", hooks: lifecycleService.getEnabledHooks(agent).valuesArray() };
   },
 
   enableHooks(args, app: TokenRingApp) {
@@ -62,7 +62,7 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
     }
     const lifecycleService = app.requireService(AgentLifecycleService);
     lifecycleService.enableHooks(args.hooks, agent);
-    return { status: "success", hooks: [...lifecycleService.getEnabledHooks(agent)] };
+    return { status: "success", hooks: lifecycleService.getEnabledHooks(agent).valuesArray() };
   },
 
   disableHooks(args, app: TokenRingApp) {
@@ -72,6 +72,6 @@ export default createRPCEndpoint(LifecycleRpcSchema, {
     }
     const lifecycleService = app.requireService(AgentLifecycleService);
     lifecycleService.disableHooks(args.hooks, agent);
-    return { status: "success", hooks: [...lifecycleService.getEnabledHooks(agent)] };
+    return { status: "success", hooks: lifecycleService.getEnabledHooks(agent).valuesArray() };
   },
 });
