@@ -4,7 +4,7 @@ import deepClone from "@tokenring-ai/utility/object/deepClone";
 import KeyedRegistry from "@tokenring-ai/utility/registry/KeyedRegistry";
 import EnhancedSet from "@tokenring-ai/utility/set/enhancedSet";
 import type { ZodType, z } from "zod";
-import { LifecycleAgentConfigSchema, type ParsedLifecycleServiceConfig } from "./schema.ts";
+import { LifecycleAgentConfigSchema, LifecycleServiceConfigSchema, type ParsedLifecycleServiceConfig } from "./schema.ts";
 import { LifecycleState } from "./state/lifecycleState.ts";
 import type { Hook, HookSubscription } from "./types";
 
@@ -18,7 +18,15 @@ export default class AgentLifecycleService implements TokenRingService {
   getAllHookEntries = this.hooks.entriesArray;
   getAllHookNames = this.hooks.keysArray;
 
-  constructor(readonly options: ParsedLifecycleServiceConfig) {}
+  private options = LifecycleServiceConfigSchema.parse({});
+
+  constructor(options?: ParsedLifecycleServiceConfig) {
+    if (options) this.options = options;
+  }
+
+  reconfigure(options: ParsedLifecycleServiceConfig): void {
+    this.options = options;
+  }
 
   attach(agent: Agent): void {
     const { enabledHooks, ...config } = deepClone(this.options.agentDefaults, agent.getAgentConfigSlice("lifecycle", LifecycleAgentConfigSchema));

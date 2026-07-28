@@ -17,8 +17,8 @@ export default {
   displayName: "Lifecycle Management",
   version: packageJSON.version,
   description: packageJSON.description,
-  install(app, config) {
-    app.addServices(new AgentLifecycleService(config.lifecycle));
+  install(app) {
+    app.addServices(new AgentLifecycleService());
     app.waitForService(AgentCommandService, agentCommandService => {
       agentCommandService.addAgentCommands([...agentCommands]);
     });
@@ -26,6 +26,9 @@ export default {
     app.waitForService(RpcService, (rpcService: RpcService) => {
       rpcService.registerEndpoint(lifecycleRPC);
     });
+  },
+  reconfigure(app, config) {
+    app.requireService(AgentLifecycleService).reconfigure(config.lifecycle);
   },
   configSchema: packageConfigSchema,
 } satisfies TokenRingPlugin<typeof packageConfigSchema>;
