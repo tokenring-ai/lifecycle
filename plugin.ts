@@ -18,7 +18,7 @@ export default {
   version: packageJSON.version,
   description: packageJSON.description,
   install(app) {
-    app.addServices(new AgentLifecycleService());
+    app.addService(new AgentLifecycleService());
     app.waitForService(AgentCommandService, agentCommandService => {
       agentCommandService.addAgentCommands([...agentCommands]);
     });

@@ -5,7 +5,7 @@ import AgentLifecycleService from "../../AgentLifecycleService.ts";
 const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
 function execute({ agent }: AgentCommandInputType<typeof inputSchema>): string {
-  const hookEntries = agent.requireServiceByType(AgentLifecycleService).getAllHookEntries();
+  const hookEntries = agent.requireService(AgentLifecycleService).getAllHookEntries();
   if (hookEntries.length === 0) return "No hooks are currently registered.";
   return `Registered hooks:\n${markdownList(hookEntries.map(([name]) => name))}`;
 }

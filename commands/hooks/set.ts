@@ -12,7 +12,7 @@ const inputSchema = {
 
 function execute({ remainder, agent }: AgentCommandInputType<typeof inputSchema>): string {
   const hookNames = remainder.split(/\s+/);
-  agent.requireServiceByType(AgentLifecycleService).setEnabledHooks(hookNames, agent);
+  agent.requireService(AgentLifecycleService).setEnabledHooks(hookNames, agent);
   return `Selected hooks: ${hookNames.join(", ") || "(none)"}`;
 }
 

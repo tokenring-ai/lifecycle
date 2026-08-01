@@ -12,7 +12,7 @@ const inputSchema = {
 
 function execute({ remainder, agent }: AgentCommandInputType<typeof inputSchema>): Promise<string> {
   const hookNames = remainder.split(/\s+/);
-  agent.requireServiceByType(AgentLifecycleService).disableHooks(hookNames, agent);
+  agent.requireService(AgentLifecycleService).disableHooks(hookNames, agent);
   return Promise.resolve(`Disabled Hooks: ${hookNames.join(", ") || "(none)"}`);
 }
 
