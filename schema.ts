@@ -9,12 +9,16 @@ export const LifecycleAgentConfigSchema = z
 
 export const LifecycleServiceConfigSchema = z
   .object({
+    globalHooks: z
+      .array(z.string())
+      .default([])
+      .meta({ label: "Global Hooks", description: "Lifecycle hooks to apply to all agents" } satisfies ConfigFieldMeta),
     agentDefaults: z
       .object({
         enabledHooks: z
           .array(z.string())
           .default([])
-          .meta({ description: "Lifecycle hook names enabled by default for new agents" } satisfies ConfigFieldMeta),
+          .meta({ description: "Lifecycle hook names enabled by default for agents that do not specify any" } satisfies ConfigFieldMeta),
       })
       .prefault({})
       .meta({ label: "Agent Defaults" } satisfies ConfigFieldMeta),

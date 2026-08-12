@@ -33,7 +33,7 @@ export default class AgentLifecycleService implements TokenRingService {
 
     // The enabled tools can include wildcards, so they need to be mapped to actual tool names with ensureItemNamesLike
     agent.initializeState(LifecycleState, {
-      enabledHooks: this.hooks.requireKeysLike(enabledHooks),
+      enabledHooks: this.hooks.requireKeysLike([...this.options.globalHooks, ...enabledHooks]),
       ...config,
     });
   }
