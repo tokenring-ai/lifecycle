@@ -85,8 +85,21 @@ export default class AgentLifecycleService implements TokenRingService {
       if (subscription) {
         for (const callback of subscription.callbacks) {
           if (callback.hookConstructor === data.constructor) {
-            const result = await callback.callback(data, agent);
-            results.push(result as z.infer<T>);
+            try {
+              const result = await callback.callback(data, agent);
+              if (data.returnType) {
+                const parsed = data.returnType.safeParse(result);
+                if (parsed.success) {
+                  results.push(parsed.data);
+                } else {
+                  agent.errorMessage(`Hook "${hookName}" callback returned invalid result: ${parsed.error.message}`);
+                }
+              } else {
+                results.push(result as z.infer<T>);
+              }
+            } catch (error) {
+              agent.errorMessage(`Hook "${hookName}" callback failed: ${error as Error}`);
+            }
           }
         }
       }
