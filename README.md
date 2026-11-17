@@ -156,7 +156,7 @@ Open an interactive tree-based selector to choose which hooks to enable.
 
 **Notes**:
 
-- Only available in interactive (non-headless) mode
+- Needs a person to answer the selection prompt
 - Selection replaces the current enabled hooks
 
 **Example Output**:

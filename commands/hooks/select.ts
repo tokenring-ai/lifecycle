@@ -51,6 +51,6 @@ export default {
 
 ## Notes
 
-- Only available in interactive (non-headless) mode
+- Needs a person to answer the selection prompt
 - Selection replaces the current enabled hooks`,
 } satisfies TokenRingAgentCommand<typeof inputSchema>;
